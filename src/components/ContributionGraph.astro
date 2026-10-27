@@ -1,0 +1,204 @@
+---
+import { getCalendar } from "../lib/contributions";
+
+interface Props {
+  user: string;
+}
+
+const { user } = Astro.props;
+const calendar = await getCalendar(user);
+
+const CELL = 10;
+const GAP = 3;
+const STEP = CELL + GAP;
+const LEFT = 28; // room for weekday labels
+const TOP = 18; // room for month labels
+const width = LEFT + calendar.weeks.length * STEP;
+const height = TOP + 7 * STEP;
+
+const dateFormat = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const monthFormat = new Intl.DateTimeFormat("en", { month: "short", timeZone: "UTC" });
+
+// A month label goes above the first week that starts in a new month.
+const months: { x: number; label: string }[] = [];
+calendar.weeks.forEach((week, i) => {
+  const first = new Date(`${week[0].date}T00:00:00Z`);
+  const prev = i > 0 ? new Date(`${calendar.weeks[i - 1][0].date}T00:00:00Z`) : null;
+  if (!prev || prev.getUTCMonth() !== first.getUTCMonth()) {
+    const x = LEFT + i * STEP;
+    // Skip a label that would overlap the previous one.
+    if (!months.length || x - months[months.length - 1].x > 24) months.push({ x, label: monthFormat.format(first) });
+  }
+});
+
+const describe = (count: number, date: string) =>
+  `${count === 0 ? "No" : count} contribution${count === 1 ? "" : "s"} on ${dateFormat.format(new Date(`${date}T00:00:00Z`))}`;
+
+// Delay for the "fill in" animation: sweeps left to right with a little jitter.
+let seed = 7;
+const jitter = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 160;
+---
+
+<section class="container section reveal" id="contributions">
+  <h2 class="section-title">Contributions</h2>
+  {
+    calendar.source === "none" ? (
+      <p class="mono">
+        Couldn't load the graph right now.{" "}
+        <a href={`https://github.com/${user}`}>See it on GitHub ↗</a>
+      </p>
+    ) : (
+      <>
+        <p class="mono summary">
+          <strong>{calendar.total.toLocaleString("en")}</strong> contributions in the last year
+          {calendar.source === "sample" && " (sample data)"}
+        </p>
+        <div class="scroller">
+          <svg
+            class="graph"
+            viewBox={`0 0 ${width} ${height}`}
+            width={width}
+            height={height}
+            shape-rendering="crispEdges"
+            role="img"
+            aria-label={`${calendar.total} GitHub contributions in the last year`}
+          >
+            {months.map((m) => (
+              <text x={m.x} y="10" class="label">
+                {m.label}
+              </text>
+            ))}
+            {["Mon", "Wed", "Fri"].map((d, i) => (
+              <text x="0" y={TOP + (i * 2 + 1) * STEP + CELL - 1} class="label">
+                {d}
+              </text>
+            ))}
+            {calendar.weeks.map((week, w) =>
+              week.map((day) => {
+                const row = new Date(`${day.date}T00:00:00Z`).getUTCDay();
+                return (
+                  <rect
+                    x={LEFT + w * STEP}
+                    y={TOP + row * STEP}
+                    width={CELL}
+                    height={CELL}
+                    class={`cell l${day.level}`}
+                    style={`--d:${Math.round(w * 14 + jitter())}ms`}
+                    data-tip={describe(day.count, day.date)}
+                  >
+                    <title>{describe(day.count, day.date)}</title>
+                  </rect>
+                );
+              }),
+            )}
+          </svg>
+        </div>
+        <div class="footer mono">
+          <span class="readout" aria-live="polite">Hover or tap a square to see the day</span>
+          <span class="legend" aria-hidden="true">
+            Less
+            {[0, 1, 2, 3, 4].map((l) => (
+              <i class={`l${l}`} />
+            ))}
+            More
+          </span>
+        </div>
+      </>
+    )
+  }
+</section>
+
+<style>
+  .summary {
+    margin-bottom: 12px;
+  }
+
+  .summary strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* On narrow screens the graph scrolls sideways inside its box,
+     never the whole page. */
+  .scroller {
+    overflow-x: auto;
+    padding: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    scrollbar-width: thin;
+  }
+
+  .graph {
+    display: block;
+    max-width: none;
+    margin-left: auto;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    fill: var(--muted);
+  }
+
+  .l0 { fill: var(--g0); }
+  .l1 { fill: var(--g1); }
+  .l2 { fill: var(--g2); }
+  .l3 { fill: var(--g3); }
+  .l4 { fill: var(--g4); }
+
+  /* Before the section scrolls into view every square is empty,
+     then the colors pop in one by one. */
+  .cell {
+    transition: fill 0.2s steps(2, end) var(--d);
+  }
+  :global(.js) .section:not(.is-visible) .cell {
+    fill: var(--g0);
+  }
+  .cell:hover {
+    stroke: var(--text);
+    stroke-width: 1;
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin-top: 10px;
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .legend i {
+    width: 10px;
+    height: 10px;
+  }
+  .legend i:first-of-type {
+    margin-left: 4px;
+  }
+  .legend i:last-of-type {
+    margin-right: 4px;
+  }
+  .legend .l0 { background: var(--g0); }
+  .legend .l1 { background: var(--g1); }
+  .legend .l2 { background: var(--g2); }
+  .legend .l3 { background: var(--g3); }
+  .legend .l4 { background: var(--g4); }
+</style>
+
+<script>
+  // Start scrolled to the most recent weeks, and show the hovered day below the graph.
+  document.querySelectorAll<HTMLElement>("#contributions .scroller").forEach((scroller) => {
+    scroller.scrollLeft = scroller.scrollWidth;
+  });
+  const readout = document.querySelector("#contributions .readout");
+  document.querySelectorAll<SVGRectElement>("#contributions .cell").forEach((cell) => {
+    cell.addEventListener("mouseenter", () => {
+      if (readout) readout.textContent = cell.dataset.tip ?? "";
+    });
+  });
+</script>

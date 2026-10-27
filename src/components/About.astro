@@ -1,0 +1,37 @@
+---
+import { profile, socials } from "../data/profile";
+---
+
+<section class="container section reveal" id="about">
+  <h2 class="section-title">About</h2>
+  {profile.bio.map((paragraph) => <p>{paragraph}</p>)}
+  <ul class="links">
+    {
+      socials.map((s) => (
+        <li>
+          <a href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
+            {s.label}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  .links span {
+    color: var(--muted);
+  }
+</style>

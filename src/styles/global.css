@@ -1,0 +1,190 @@
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+@import "@fontsource/pixelify-sans/400.css";
+@import "@fontsource/pixelify-sans/600.css";
+
+/* ---------- Colors ---------- */
+:root {
+  --bg: #fbfaf7;
+  --surface: #f2f0ea;
+  --text: #17171c;
+  --muted: #64646e;
+  --border: #e3e0d8;
+  --accent: #2f9e5b;
+  /* Contribution graph, from "no activity" to "lots" */
+  --g0: #ebe8e0;
+  --g1: #b6e3c2;
+  --g2: #6fcb8c;
+  --g3: #34a95e;
+  --g4: #1d7a40;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0b10;
+    --surface: #15151c;
+    --text: #ececf1;
+    --muted: #9696a3;
+    --border: #25252f;
+    --accent: #4ade80;
+    --g0: #1b1b24;
+    --g1: #14532d;
+    --g2: #1e7a40;
+    --g3: #2fb85d;
+    --g4: #5ef08e;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0b10;
+  --surface: #15151c;
+  --text: #ececf1;
+  --muted: #9696a3;
+  --border: #25252f;
+  --accent: #4ade80;
+  --g0: #1b1b24;
+  --g1: #14532d;
+  --g2: #1e7a40;
+  --g3: #2fb85d;
+  --g4: #5ef08e;
+  color-scheme: dark;
+}
+
+/* ---------- Fonts ---------- */
+:root {
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+  --font-pixel: "Pixelify Sans", var(--font-mono);
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--border);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s;
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ---------- Shared bits ---------- */
+.container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.section {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-top: 1px dashed var(--border);
+}
+
+/* Pixel-font section title with a little square bullet */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+  font-family: var(--font-pixel);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.section-title::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* Fade + rise once when a section scrolls into view.
+   Only when JS runs, so the page is never blank without it. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hide from screens but keep for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

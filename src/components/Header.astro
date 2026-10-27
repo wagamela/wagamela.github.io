@@ -1,0 +1,76 @@
+---
+import { profile } from "../data/profile";
+---
+
+<header class="container header">
+  <span class="mono handle">@{profile.githubUser}</span>
+  <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+    <!-- Pixel sun / moon, drawn on an 8×8 grid -->
+    <svg class="icon-sun" viewBox="0 0 8 8" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true">
+      <path fill="currentColor" d="M3 0h2v1H3zM3 7h2v1H3zM0 3h1v2H0zM7 3h1v2H7zM2 2h4v4H2zM1 1h1v1H1zM6 1h1v1H6zM1 6h1v1H1zM6 6h1v1H6z" />
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 8 8" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true">
+      <path fill="currentColor" d="M3 0h3v1H3zM2 1h2v1H2zM1 2h2v4H1zM2 6h2v1H2zM3 7h3v1H3zM4 6h3v1H4zM6 5h2v1H6z" />
+    </svg>
+  </button>
+</header>
+
+<style>
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+  }
+
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Show the moon in light mode (click to go dark) and the sun in dark mode. */
+  .icon-sun {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .icon-sun {
+    display: block;
+  }
+  :global(:root[data-theme="dark"]) .icon-moon {
+    display: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .icon-sun {
+      display: block;
+    }
+    :global(:root:not([data-theme="light"])) .icon-moon {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const button = document.querySelector(".theme-toggle")!;
+  button.addEventListener("click", () => {
+    const root = document.documentElement;
+    const isDark =
+      root.dataset.theme === "dark" ||
+      (!root.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+    const next = isDark ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("theme", next);
+    } catch {}
+  });
+</script>
