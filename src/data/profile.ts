@@ -3,7 +3,7 @@
 // Lines marked TODO are placeholders waiting for your real info.
 
 export const profile = {
-  name: "Emir Akbulut",
+  name: "wagamela",
   githubUser: "wagamela",
   // One short line under your name.
   tagline: "Student developer who likes building things for the web.", // TODO
@@ -53,7 +53,8 @@ export type Project = {
 export const projects: Project[] = [
   {
     name: "Portfolio",
-    description: "This site. Built with Astro, a pixel font and a homemade contribution graph.",
+    description:
+      "This site. Built with Astro, a pixel font and a homemade contribution graph.",
     tags: ["Astro", "TypeScript", "CSS"],
     href: "https://github.com/wagamela/wagamela.github.io",
     status: "current",
