@@ -3,20 +3,38 @@ import { profile } from "../data/profile";
 import PixelAvatar from "./PixelAvatar.astro";
 ---
 
-<section class="container hero">
-  <PixelAvatar seed={profile.name} />
-  <h1 class="name">{profile.name}</h1>
-  <p class="tagline">{profile.tagline}</p>
-  <p class="mono status">
-    <span class="dot" aria-hidden="true"></span>
-    {profile.status} · {profile.location}
-  </p>
+<section class="hero">
+  <canvas class="field" aria-hidden="true"></canvas>
+  <div class="container content">
+    <PixelAvatar seed={profile.name} />
+    <h1 class="name">{profile.name}</h1>
+    <p class="tagline">{profile.tagline}</p>
+    <p class="mono status">
+      <span class="dot" aria-hidden="true"></span>
+      {profile.status} · {profile.location}
+    </p>
+  </div>
 </section>
 
 <style>
   .hero {
-    padding-top: 56px;
-    padding-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Contribution-square field behind the hero, faded out at the edges. */
+  .field {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 70%, transparent);
+  }
+
+  .content {
+    position: relative;
+    padding-top: 72px;
+    padding-bottom: 64px;
   }
 
   .name {
@@ -26,6 +44,17 @@ import PixelAvatar from "./PixelAvatar.astro";
     font-weight: 600;
     line-height: 1.1;
     letter-spacing: 0.01em;
+  }
+
+  /* Block cursor after the name, like a prompt waiting for input */
+  .name::after {
+    content: "";
+    display: inline-block;
+    width: 0.45em;
+    height: 0.8em;
+    margin-left: 0.1em;
+    background: var(--accent);
+    animation: blink 1.1s steps(1, end) infinite;
   }
 
   .tagline {
@@ -55,3 +84,177 @@ import PixelAvatar from "./PixelAvatar.astro";
     }
   }
 </style>
+
+<script>
+  // A field of contribution squares that light up around the pointer, ripple on tap,
+  // and spark now and then on their own. Squares behind the text stay unlit so it reads.
+  const hero = document.querySelector<HTMLElement>(".hero")!;
+  const canvas = hero.querySelector("canvas")!;
+  const ctx = canvas.getContext("2d")!;
+  const content = hero.querySelector<HTMLElement>(".content")!;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const CELL = 10;
+  const STEP = 13; // same size and gap as the contribution graph
+  const LEVELS = [0.12, 0.35, 0.6, 0.85]; // energy thresholds for levels 1–4
+
+  let cols = 0;
+  let rows = 0;
+  let ox = 0;
+  let energy = new Float32Array(0);
+  let cap = new Float32Array(0);
+  let colors: string[] = [];
+  let ripples: { x: number; y: number; t: number }[] = [];
+  let pointer: { x: number; y: number } | null = null;
+  let last: { x: number; y: number } | null = null;
+
+  const readColors = () => {
+    const s = getComputedStyle(document.documentElement);
+    colors = [0, 1, 2, 3, 4].map((i) => s.getPropertyValue(`--g${i}`).trim());
+  };
+
+  const resize = () => {
+    const { width, height } = canvas.getBoundingClientRect();
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Line the grid up with the text column's left edge.
+    ox = (content.firstElementChild!.getBoundingClientRect().left - canvas.getBoundingClientRect().left) % STEP;
+    cols = Math.ceil(width / STEP) + 1;
+    rows = Math.ceil(height / STEP);
+    energy = new Float32Array(cols * rows);
+    cap = new Float32Array(cols * rows).fill(1);
+    const box = canvas.getBoundingClientRect();
+    for (const el of content.children) {
+      const r = el.getBoundingClientRect();
+      const c0 = Math.floor((r.left - box.left - ox - 6) / STEP) + 1;
+      const c1 = Math.ceil((r.right - box.left - ox + 6) / STEP) + 1;
+      const r0 = Math.floor((r.top - box.top - 6) / STEP);
+      const r1 = Math.ceil((r.bottom - box.top + 6) / STEP);
+      for (let y = Math.max(r0, 0); y < Math.min(r1, rows); y++)
+        for (let x = Math.max(c0, 0); x < Math.min(c1, cols); x++) cap[y * cols + x] = LEVELS[0] - 0.01;
+    }
+  };
+
+  const toCell = (px: number, py: number) => ({ x: (px - ox) / STEP + 1, y: py / STEP });
+
+  const glow = (cx: number, cy: number, radius: number, strength: number) => {
+    for (let y = Math.max(0, Math.floor(cy - radius)); y <= Math.min(rows - 1, cy + radius); y++)
+      for (let x = Math.max(0, Math.floor(cx - radius)); x <= Math.min(cols - 1, cx + radius); x++) {
+        const d = Math.hypot(x - cx, y - cy);
+        if (d > radius) continue;
+        const i = y * cols + x;
+        energy[i] = Math.max(energy[i], strength * (1 - d / radius));
+      }
+  };
+
+  const step = (now: number) => {
+    for (let i = 0; i < energy.length; i++) energy[i] *= 0.84;
+
+    // Trail: fill in between pointer samples so fast moves stay continuous.
+    if (pointer) {
+      const from = last ?? pointer;
+      const n = Math.max(1, Math.ceil(Math.hypot(pointer.x - from.x, pointer.y - from.y)));
+      for (let k = 1; k <= n; k++)
+        glow(from.x + ((pointer.x - from.x) * k) / n, from.y + ((pointer.y - from.y) * k) / n, 2.6, 1);
+      last = pointer;
+    }
+
+    ripples = ripples.filter((r) => now - r.t < 1400);
+    for (const r of ripples) {
+      const radius = ((now - r.t) / 1000) * 22;
+      const strength = 1 - (now - r.t) / 1400;
+      for (let y = 0; y < rows; y++)
+        for (let x = 0; x < cols; x++) {
+          if (Math.abs(Math.hypot(x - r.x, y - r.y) - radius) > 0.6) continue;
+          const i = y * cols + x;
+          energy[i] = Math.max(energy[i], strength);
+        }
+    }
+
+    // Idle sparks, like commits landing.
+    if (Math.random() < 0.5) energy[Math.floor(Math.random() * energy.length)] = 0.5 + Math.random() * 0.6;
+  };
+
+  const draw = () => {
+    const { width, height } = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, width, height);
+    for (let level = 0; level < 5; level++) {
+      ctx.fillStyle = colors[level];
+      for (let y = 0; y < rows; y++)
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x;
+          const e = Math.min(energy[i], cap[i]);
+          let l = 0;
+          while (l < 4 && e >= LEVELS[l]) l++;
+          if (l === level) ctx.fillRect(ox + (x - 1) * STEP, y * STEP, CELL, CELL);
+        }
+    }
+  };
+
+  readColors();
+  resize();
+
+  if (reduce) {
+    // One still frame with a few lit squares.
+    for (let k = 0; k < energy.length / 12; k++) energy[Math.floor(Math.random() * energy.length)] = Math.random();
+    draw();
+  } else {
+    let running = false;
+    let prev = 0;
+    const loop = (now: number) => {
+      if (!running) return;
+      requestAnimationFrame(loop);
+      if (now - prev < 33) return; // ~30fps is plenty for stepped pixels
+      prev = now;
+      step(now);
+      draw();
+    };
+    const setRunning = (on: boolean) => {
+      if (on === running) return;
+      running = on;
+      if (on) requestAnimationFrame(loop);
+    };
+    let onScreen = true;
+    new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      setRunning(onScreen && !document.hidden);
+    }).observe(hero);
+    document.addEventListener("visibilitychange", () => setRunning(onScreen && !document.hidden));
+
+    const local = (e: PointerEvent) => {
+      const box = canvas.getBoundingClientRect();
+      return toCell(e.clientX - box.left, e.clientY - box.top);
+    };
+    hero.addEventListener("pointermove", (e) => {
+      pointer = local(e);
+    });
+    hero.addEventListener("pointerleave", () => {
+      pointer = last = null;
+    });
+    hero.addEventListener("pointerdown", (e) => {
+      ripples.push({ ...local(e), t: performance.now() });
+    });
+
+    // Opening ripple from the avatar.
+    const avatar = content.firstElementChild!.getBoundingClientRect();
+    const box = canvas.getBoundingClientRect();
+    ripples.push({ ...toCell(avatar.left - box.left + avatar.width / 2, avatar.top - box.top + avatar.height / 2), t: performance.now() });
+    setRunning(true);
+  }
+
+  new ResizeObserver(() => {
+    resize();
+    if (reduce) draw();
+  }).observe(hero);
+  // Repaint with the new palette when the theme changes.
+  new MutationObserver(() => {
+    readColors();
+    if (reduce) draw();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    readColors();
+    if (reduce) draw();
+  });
+</script>

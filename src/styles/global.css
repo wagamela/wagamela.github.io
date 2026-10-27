@@ -153,17 +153,60 @@ p {
   color: var(--muted);
 }
 
-/* Fade + rise once when a section scrolls into view.
-   Only when JS runs, so the page is never blank without it. */
-.js .reveal {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+/* When a section scrolls into view its title square climbs the
+   contribution levels, then the title wipes in pixel by pixel.
+   Only when JS runs, so nothing stays hidden without it. */
+.js .reveal .section-title {
+  clip-path: inset(0 0 0 0);
+}
+.js .reveal:not(.is-visible) .section-title {
+  clip-path: inset(0 calc(100% - 18px) 0 0);
+}
+.js .reveal:not(.is-visible) .section-title::before {
+  background: var(--g0);
+}
+.js .reveal.is-visible .section-title {
+  animation: title-wipe 0.45s steps(8, end) 0.3s both;
+}
+.js .reveal.is-visible .section-title::before {
+  animation: level-up 0.4s steps(1, end) both;
 }
 
-.js .reveal.is-visible {
-  opacity: 1;
-  transform: none;
+@keyframes title-wipe {
+  from {
+    clip-path: inset(0 calc(100% - 18px) 0 0);
+  }
+}
+
+@keyframes level-up {
+  0% { background: var(--g0); }
+  20% { background: var(--g1); }
+  40% { background: var(--g2); }
+  60% { background: var(--g3); }
+  80%, 100% { background: var(--accent); }
+}
+
+/* Theme switch: the new palette spreads out from the toggle button. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-spread 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes theme-spread {
+  from {
+    clip-path: circle(0 at var(--toggle-x, 100%) var(--toggle-y, 0));
+  }
+  to {
+    clip-path: circle(150vmax at var(--toggle-x, 100%) var(--toggle-y, 0));
+  }
+}
+
+/* Themed scrollbars to match the palette */
+html {
+  scrollbar-color: var(--border) var(--bg);
 }
 
 /* Hide from screens but keep for screen readers */
@@ -183,8 +226,10 @@ p {
     animation: none !important;
     transition: none !important;
   }
-  .js .reveal {
-    opacity: 1;
-    transform: none;
+  .js .reveal .section-title {
+    clip-path: none;
+  }
+  .js .reveal .section-title::before {
+    background: var(--accent);
   }
 }

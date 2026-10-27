@@ -1,5 +1,6 @@
 ---
 import { getCalendar } from "../lib/contributions";
+import PixelArrow from "./PixelArrow.astro";
 
 interface Props {
   user: string;
@@ -40,12 +41,12 @@ const jitter = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 160;
 ---
 
 <section class="container section reveal" id="contributions">
-  <h2 class="section-title">Contributions</h2>
+  <h2 class="section-title">My GitHub, lately</h2>
   {
     calendar.source === "none" ? (
       <p class="mono">
         Couldn't load the graph right now.{" "}
-        <a href={`https://github.com/${user}`}>See it on GitHub ↗</a>
+        <a href={`https://github.com/${user}`}>See it on GitHub <PixelArrow /></a>
       </p>
     ) : (
       <>
@@ -94,7 +95,7 @@ const jitter = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 160;
           </svg>
         </div>
         <div class="footer mono">
-          <span class="readout" aria-live="polite">Hover or tap a square to see the day</span>
+          <span class="readout" aria-live="polite">Point at a square to see that day</span>
           <span class="legend" aria-hidden="true">
             Less
             {[0, 1, 2, 3, 4].map((l) => (
