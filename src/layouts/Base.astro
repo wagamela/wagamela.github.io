@@ -43,7 +43,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
             observer.unobserve(entry.target);
           }
         },
-        { threshold: 0.15 },
+        // Root stretches far upward so sections skipped by a jump (anchor link, End key) still count.
+        { threshold: 0.15, rootMargin: "100000px 0px 0px 0px" },
       );
       document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     </script>

@@ -1,5 +1,6 @@
 ---
 import { projects, type Project } from "../data/profile";
+import PixelArrow from "./PixelArrow.astro";
 
 const groups: { title: string; items: Project[] }[] = [
   { title: "Now building", items: projects.filter((p) => p.status === "current") },
@@ -8,7 +9,7 @@ const groups: { title: string; items: Project[] }[] = [
 ---
 
 <section class="container section reveal" id="projects">
-  <h2 class="section-title">Projects</h2>
+  <h2 class="section-title">Things I've built</h2>
   {
     groups.map((group) => (
       <div class="group">
@@ -18,7 +19,7 @@ const groups: { title: string; items: Project[] }[] = [
             <li class="card">
               <div class="head">
                 <h4>{p.href ? <a href={p.href}>{p.name}</a> : p.name}</h4>
-                {p.href && <span class="arrow" aria-hidden="true">↗</span>}
+                {p.href && <PixelArrow />}
               </div>
               <p>{p.description}</p>
               <div class="tags">
@@ -55,28 +56,61 @@ const groups: { title: string; items: Project[] }[] = [
     list-style: none;
   }
 
-  /* Cards get a hard pixel shadow on hover instead of a soft blur. */
   .card {
     position: relative;
     padding: 16px;
     border: 1px solid var(--border);
     background: var(--bg);
-    transition: transform 0.15s steps(2, end), box-shadow 0.15s steps(2, end);
+    transition: border-color 0.15s, background-color 0.15s;
   }
 
-  .card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 var(--accent);
+  /* Corner pixels light up on hover, like the card got selected. */
+  .card::before,
+  .card::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    transform: scale(0);
+    transition: transform 0.2s steps(3, end);
+  }
+  .card::before {
+    top: -1px;
+    left: -1px;
+  }
+  .card::after {
+    right: -1px;
+    bottom: -1px;
+  }
+
+  .card:hover,
+  .card:focus-within {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .card:hover::before,
+  .card:hover::after,
+  .card:focus-within::before,
+  .card:focus-within::after {
+    transform: scale(1);
+  }
+  .card:hover :global(.pixel-arrow),
+  .card:focus-within :global(.pixel-arrow) {
+    color: var(--accent);
+    transform: translate(2px, -2px);
   }
 
   .head {
     display: flex;
     justify-content: space-between;
     gap: 8px;
+    color: var(--muted);
   }
 
   h4 {
     margin: 0 0 6px;
+    color: var(--text);
     font-size: 1rem;
     font-weight: 600;
   }
@@ -89,10 +123,6 @@ const groups: { title: string; items: Project[] }[] = [
     content: "";
     position: absolute;
     inset: 0;
-  }
-
-  .arrow {
-    color: var(--muted);
   }
 
   p {

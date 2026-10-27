@@ -1,9 +1,10 @@
 ---
 import { profile, socials } from "../data/profile";
+import PixelArrow from "./PixelArrow.astro";
 ---
 
 <section class="container section reveal" id="about">
-  <h2 class="section-title">About</h2>
+  <h2 class="section-title">The short version</h2>
   {profile.bio.map((paragraph) => <p>{paragraph}</p>)}
   <ul class="links">
     {
@@ -11,7 +12,7 @@ import { profile, socials } from "../data/profile";
         <li>
           <a href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
             {s.label}
-            <span aria-hidden="true">↗</span>
+            <PixelArrow />
           </a>
         </li>
       ))
@@ -23,15 +24,34 @@ import { profile, socials } from "../data/profile";
   .links {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 20px;
-    margin: 20px 0 0;
+    gap: 8px;
+    margin: 24px 0 0;
     padding: 0;
     list-style: none;
     font-family: var(--font-mono);
     font-size: 0.875rem;
   }
 
-  .links span {
-    color: var(--muted);
+  /* A green fill steps in from the left on hover, like a cell filling up. */
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: linear-gradient(var(--g1), var(--g1)) no-repeat left / 0 100%;
+    text-decoration: none;
+    transition: background-size 0.24s steps(4, end), border-color 0.15s;
+  }
+
+  .links a:hover,
+  .links a:focus-visible {
+    border-color: var(--accent);
+    background-size: 100% 100%;
+  }
+
+  .links a:hover :global(.pixel-arrow),
+  .links a:focus-visible :global(.pixel-arrow) {
+    transform: translate(2px, -2px);
   }
 </style>

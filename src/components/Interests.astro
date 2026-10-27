@@ -3,9 +3,9 @@ import { interests } from "../data/profile";
 ---
 
 <section class="container section reveal" id="interests">
-  <h2 class="section-title">Hobbies & interests</h2>
+  <h2 class="section-title">When I'm not coding</h2>
   <ul class="chips">
-    {interests.map((item) => <li>{item}</li>)}
+    {interests.map((item, i) => <li style={`--l:var(--g${(i % 3) + 2})`}>{item}</li>)}
   </ul>
 </section>
 
@@ -19,10 +19,30 @@ import { interests } from "../data/profile";
     list-style: none;
   }
 
+  /* Each chip carries a square in a different graph shade. */
   li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     padding: 6px 12px;
     border: 1px solid var(--border);
     background: var(--surface);
     font-size: 0.9375rem;
+    transition: border-color 0.15s;
+  }
+
+  li::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: var(--l);
+    transition: transform 0.2s steps(2, end);
+  }
+
+  li:hover {
+    border-color: var(--accent);
+  }
+  li:hover::before {
+    transform: rotate(90deg) scale(1.25);
   }
 </style>

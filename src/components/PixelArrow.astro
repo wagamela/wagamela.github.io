@@ -1,0 +1,14 @@
+---
+// Pixel "opens elsewhere" arrow, drawn on the same 8×8 grid as the header icons.
+---
+
+<svg class="pixel-arrow" viewBox="0 0 8 8" width="12" height="12" shape-rendering="crispEdges" aria-hidden="true">
+  <path fill="currentColor" d="M3 1h4v4H6V2H3zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 6h1v1H1z" />
+</svg>
+
+<style>
+  .pixel-arrow {
+    flex-shrink: 0;
+    transition: transform 0.2s steps(2, end);
+  }
+</style>

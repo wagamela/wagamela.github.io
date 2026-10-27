@@ -1,10 +1,12 @@
 ---
 import { profile } from "../data/profile";
+
+const built = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(new Date());
 ---
 
 <footer class="container footer mono">
   <span>© {new Date().getFullYear()} {profile.name}</span>
-  <span>Built with <a href="https://astro.build">Astro</a> · hosted on GitHub Pages</span>
+  <span>Hand-built with <a href="https://astro.build">Astro</a> · rebuilt daily, last on {built}</span>
 </footer>
 
 <style>
