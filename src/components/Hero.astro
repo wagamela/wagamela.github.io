@@ -1,0 +1,57 @@
+---
+import { profile } from "../data/profile";
+import PixelAvatar from "./PixelAvatar.astro";
+---
+
+<section class="container hero">
+  <PixelAvatar seed={profile.name} />
+  <h1 class="name">{profile.name}</h1>
+  <p class="tagline">{profile.tagline}</p>
+  <p class="mono status">
+    <span class="dot" aria-hidden="true"></span>
+    {profile.status} · {profile.location}
+  </p>
+</section>
+
+<style>
+  .hero {
+    padding-top: 56px;
+    padding-bottom: 40px;
+  }
+
+  .name {
+    margin: 24px 0 8px;
+    font-family: var(--font-pixel);
+    font-size: clamp(2.25rem, 8vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+  }
+
+  .tagline {
+    margin: 0 0 16px;
+    font-size: 1.125rem;
+    color: var(--muted);
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  /* Blinking pixel, like a terminal cursor */
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    animation: blink 1.2s steps(1, end) 4; /* blinks a few times, then rests */
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0.2;
+    }
+  }
+</style>

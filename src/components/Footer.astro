@@ -1,0 +1,20 @@
+---
+import { profile } from "../data/profile";
+---
+
+<footer class="container footer mono">
+  <span>© {new Date().getFullYear()} {profile.name}</span>
+  <span>Built with <a href="https://astro.build">Astro</a> · hosted on GitHub Pages</span>
+</footer>
+
+<style>
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding-top: 24px;
+    padding-bottom: 48px;
+    border-top: 1px dashed var(--border);
+  }
+</style>

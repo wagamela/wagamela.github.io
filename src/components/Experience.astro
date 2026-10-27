@@ -1,0 +1,74 @@
+---
+import { experience } from "../data/profile";
+---
+
+<section class="container section reveal" id="experience">
+  <h2 class="section-title">Experience</h2>
+  <ol class="timeline">
+    {
+      experience.map((job) => (
+        <li>
+          <div class="head">
+            <h3>
+              {job.href ? <a href={job.href}>{job.company}</a> : job.company}
+            </h3>
+            <span class="mono">{job.period}</span>
+          </div>
+          <p class="role">{job.role}</p>
+          <p class="description">{job.description}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .timeline {
+    margin: 0;
+    padding: 0 0 0 20px;
+    list-style: none;
+    border-left: 2px dotted var(--border);
+  }
+
+  li {
+    position: relative;
+  }
+
+  li + li {
+    margin-top: 28px;
+  }
+
+  /* Square marker sitting on the dotted line */
+  li::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: -26px;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0 12px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  .role {
+    margin: 0 0 6px;
+    color: var(--muted);
+  }
+
+  .description {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import { interests } from "../data/profile";
+---
+
+<section class="container section reveal" id="interests">
+  <h2 class="section-title">Hobbies & interests</h2>
+  <ul class="chips">
+    {interests.map((item) => <li>{item}</li>)}
+  </ul>
+</section>
+
+<style>
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 0.9375rem;
+  }
+</style>

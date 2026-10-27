@@ -1,0 +1,109 @@
+---
+import { projects, type Project } from "../data/profile";
+
+const groups: { title: string; items: Project[] }[] = [
+  { title: "Now building", items: projects.filter((p) => p.status === "current") },
+  { title: "Earlier", items: projects.filter((p) => p.status === "past") },
+].filter((g) => g.items.length > 0);
+---
+
+<section class="container section reveal" id="projects">
+  <h2 class="section-title">Projects</h2>
+  {
+    groups.map((group) => (
+      <div class="group">
+        <h3 class="mono group-title">{group.title}</h3>
+        <ul class="list">
+          {group.items.map((p) => (
+            <li class="card">
+              <div class="head">
+                <h4>{p.href ? <a href={p.href}>{p.name}</a> : p.name}</h4>
+                {p.href && <span class="arrow" aria-hidden="true">↗</span>}
+              </div>
+              <p>{p.description}</p>
+              <div class="tags">
+                {p.tags.map((t) => (
+                  <span class="tag">{t}</span>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .group + .group {
+    margin-top: 28px;
+  }
+
+  .group-title {
+    margin: 0 0 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Cards get a hard pixel shadow on hover instead of a soft blur. */
+  .card {
+    position: relative;
+    padding: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    transition: transform 0.15s steps(2, end), box-shadow 0.15s steps(2, end);
+  }
+
+  .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--accent);
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  h4 {
+    margin: 0 0 6px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* Make the whole card clickable when it has a link. */
+  h4 a {
+    text-decoration: none;
+  }
+  h4 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .arrow {
+    color: var(--muted);
+  }
+
+  p {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+</style>
