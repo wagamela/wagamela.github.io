@@ -28,6 +28,8 @@ export type Experience = {
   role: string;
   period: string;
   href?: string;
+  // Logo file in /public, e.g. "RaynetLogo.svg". Shown in a frame beside the entry.
+  logo?: string;
   description: string;
 };
 
@@ -35,6 +37,7 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     company: "Raynet",
+    logo: "RaynetLogo.svg",
     role: "Software Development Intern",
     period: "2025 · 3 months", // TODO: e.g. "Jun – Aug 2025"
     description:
