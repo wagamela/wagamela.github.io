@@ -16,11 +16,14 @@ export const profile = {
   ],
 };
 
-// icon: one of "github", "linkedin", "x", "email" (pixel icons in SocialIcon.astro).
+// icon: one of "github", "linkedin", "instagram", "x", "steam", "itch", "email" (pixel icons in SocialIcon.astro).
 export const socials: { label: string; href: string; icon?: string }[] = [
   { label: "GitHub", href: "https://github.com/wagamela", icon: "github" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name", icon: "linkedin" }, // TODO
+  { label: "Instagram", href: "https://www.instagram.com/your-name", icon: "instagram" }, // TODO
   { label: "X", href: "https://x.com/your-name", icon: "x" }, // TODO
+  { label: "Steam", href: "https://steamcommunity.com/id/your-name", icon: "steam" }, // TODO
+  { label: "itch.io", href: "https://your-name.itch.io", icon: "itch" }, // TODO
   { label: "Email", href: "mailto:you@example.com", icon: "email" }, // TODO
 ];
 
