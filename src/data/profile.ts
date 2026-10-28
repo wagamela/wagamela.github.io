@@ -5,26 +5,37 @@
 export const profile = {
   name: "wagamela",
   githubUser: "wagamela",
-  // One short line under your name.
-  tagline: "Student developer who likes building things for the web.", // TODO
-  location: "Türkiye", // TODO
-  status: "Studying IT at a vocational high school", // TODO
+  tagline: "Student developer who likes building things and learning.",
+  location: "Türkiye",
+  status: "Studying IT at OIBMTAL High School", // TODO
   // Your bio. Each string becomes its own paragraph.
   bio: [
-    "Hi, I'm Emir. I'm a student in the IT class of a vocational high school, and I spend most of my free time writing code.", // TODO
-    "I like turning small ideas into working projects, learning how things work under the hood, and sharing what I build on GitHub.", // TODO
+    "Hi, I'm Emir. I'm a student in the IT class of a vocational high school, and I spend most of my free time developing small projects.",
+    "I like to learn about new technologies and how to apply them in creative ways. I mostly like to work on frontend development, but I also enjoy learning about backend and game development.",
   ],
 };
 
 // icon: one of "github", "linkedin", "instagram", "x", "steam", "itch", "email" (pixel icons in SocialIcon.astro).
 export const socials: { label: string; href: string; icon?: string }[] = [
   { label: "GitHub", href: "https://github.com/wagamela", icon: "github" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name", icon: "linkedin" }, // TODO
-  { label: "Instagram", href: "https://www.instagram.com/your-name", icon: "instagram" }, // TODO
-  { label: "X", href: "https://x.com/your-name", icon: "x" }, // TODO
-  { label: "Steam", href: "https://steamcommunity.com/id/your-name", icon: "steam" }, // TODO
-  { label: "itch.io", href: "https://your-name.itch.io", icon: "itch" }, // TODO
-  { label: "Email", href: "mailto:you@example.com", icon: "email" }, // TODO
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/emir-akbulut-993564302/",
+    icon: "linkedin",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/emirakblutt/",
+    icon: "instagram",
+  }, // TODO
+  { label: "X", href: "https://x.com/wagamelaa", icon: "x" }, // TODO
+  {
+    label: "Steam",
+    href: "https://steamcommunity.com/id/wagamela/",
+    icon: "steam",
+  }, // TODO
+  { label: "itch.io", href: "https://wagamela.itch.io/", icon: "itch" }, // TODO
+  { label: "Email", href: "mailto:wagamela.dev@gmail.com", icon: "email" }, // TODO
 ];
 
 export type Experience = {
@@ -43,9 +54,9 @@ export const experience: Experience[] = [
     company: "Raynet",
     logo: "RaynetLogo.svg",
     role: "Software Development Intern",
-    period: "2025 · 3 months", // TODO: e.g. "Jun – Aug 2025"
+    period: "Apr - July 2026 · 3 months", // TODO: e.g. "Jun – Aug 2025"
     description:
-      "Three-month internship. Write a sentence or two about what you worked on and what you learned.", // TODO
+      "Three-month internship via Erasmus+ project. My first experience in a professional development environment.", // TODO
   },
 ];
 
@@ -83,9 +94,14 @@ export const projects: Project[] = [
 
 // Short words or phrases. Add an emoji if you like, or keep them plain.
 export const interests: string[] = [
-  "Web development", // TODO
-  "Open source", // TODO
-  "Linux", // TODO
-  "Gaming", // TODO
-  "Music", // TODO
+  "Web development",
+  "Game development",
+  "Open source",
+  "Linux",
+  "Gaming",
+  "Football",
+  "Basketball",
+  "Speedcubing",
+  "Electronics",
+  "Jersey design",
 ];

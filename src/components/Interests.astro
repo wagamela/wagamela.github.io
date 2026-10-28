@@ -3,7 +3,7 @@ import { interests } from "../data/profile";
 ---
 
 <section class="container section reveal" id="interests">
-  <h2 class="section-title">When I'm not coding</h2>
+  <h2 class="section-title">My interests</h2>
   <ul class="chips">
     {interests.map((item, i) => <li style={`--l:var(--g${(i % 3) + 2})`}>{item}</li>)}
   </ul>
@@ -26,9 +26,11 @@ import { interests } from "../data/profile";
     gap: 8px;
     padding: 6px 12px;
     border: 1px solid var(--border);
+    border-radius: var(--radius);
     background: var(--surface);
+    box-shadow: var(--shadow);
     font-size: 0.9375rem;
-    transition: border-color 0.15s;
+    transition: border-color 0.3s var(--ease-soft);
   }
 
   li::before {

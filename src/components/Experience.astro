@@ -5,7 +5,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
 <section class="container section reveal" id="experience">
-  <h2 class="section-title">Where I've worked</h2>
+  <h2 class="section-title">Experience</h2>
   <ol class="timeline">
     {
       experience.map((job) => (
@@ -79,8 +79,10 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     height: 96px;
     padding: 16px 20px;
     border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
     background: radial-gradient(var(--border) 1px, transparent 1.5px) 0 0 / 13px 13px, var(--surface);
-    transition: border-color 0.15s;
+    transition: border-color 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
   }
   .frame::before,
   .frame::after {
@@ -91,15 +93,16 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     background: var(--accent);
   }
   .frame::before {
-    top: -1px;
-    left: -1px;
+    top: 6px;
+    left: 6px;
   }
   .frame::after {
-    right: -1px;
-    bottom: -1px;
+    right: 6px;
+    bottom: 6px;
   }
   li:hover .frame {
     border-color: var(--accent);
+    box-shadow: var(--shadow-lift);
   }
 
   .head {

@@ -9,7 +9,7 @@ const groups: { title: string; items: Project[] }[] = [
 ---
 
 <section class="container section reveal" id="projects">
-  <h2 class="section-title">Things I've built</h2>
+  <h2 class="section-title">Projects</h2>
   {
     groups.map((group) => (
       <div class="group">
@@ -60,8 +60,11 @@ const groups: { title: string; items: Project[] }[] = [
     position: relative;
     padding: 16px;
     border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
     background: var(--bg);
-    transition: border-color 0.15s, background-color 0.15s;
+    box-shadow: var(--shadow);
+    transition: border-color 0.3s var(--ease-soft), background-color 0.3s var(--ease-soft),
+      box-shadow 0.3s var(--ease-soft), transform 0.3s var(--ease-soft);
   }
 
   /* Corner pixels light up on hover, like the card got selected. */
@@ -76,18 +79,20 @@ const groups: { title: string; items: Project[] }[] = [
     transition: transform 0.2s steps(3, end);
   }
   .card::before {
-    top: -1px;
-    left: -1px;
+    top: 6px;
+    left: 6px;
   }
   .card::after {
-    right: -1px;
-    bottom: -1px;
+    right: 6px;
+    bottom: 6px;
   }
 
   .card:hover,
   .card:focus-within {
     border-color: var(--accent);
     background: var(--surface);
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
   }
   .card:hover::before,
   .card:hover::after,

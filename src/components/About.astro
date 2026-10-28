@@ -44,9 +44,11 @@ import SocialIcon from "./SocialIcon.astro";
     gap: 8px;
     padding: 6px 12px;
     border: 1px solid var(--border);
+    border-radius: var(--radius);
     background: var(--bg);
+    box-shadow: var(--shadow);
     text-decoration: none;
-    transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: border-color 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
   }
 
   .links a::before {
@@ -54,6 +56,7 @@ import SocialIcon from "./SocialIcon.astro";
     position: absolute;
     inset: 0;
     z-index: -1;
+    border-radius: inherit;
     background: var(--g1);
     transform: scaleX(0);
     transform-origin: left;
@@ -63,6 +66,7 @@ import SocialIcon from "./SocialIcon.astro";
   .links a:hover,
   .links a:focus-visible {
     border-color: var(--accent);
+    box-shadow: var(--shadow-lift);
   }
 
   .links a:hover::before,

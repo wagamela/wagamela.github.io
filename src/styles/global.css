@@ -17,6 +17,7 @@
   --g2: #6fcb8c;
   --g3: #34a95e;
   --g4: #1d7a40;
+  --shadow-rgb: 60 52 30;
   color-scheme: light;
 }
 
@@ -33,6 +34,7 @@
     --g2: #1e7a40;
     --g3: #2fb85d;
     --g4: #5ef08e;
+    --shadow-rgb: 0 0 0;
     color-scheme: dark;
   }
 }
@@ -49,7 +51,20 @@
   --g2: #1e7a40;
   --g3: #2fb85d;
   --g4: #5ef08e;
+  --shadow-rgb: 0 0 0;
   color-scheme: dark;
+}
+
+/* ---------- Shape ----------
+   Containers are soft (small radii, blurred shadows); the pixel marks on
+   them (bullets, cursor, corner pixels) stay square. That contrast is the look. */
+:root {
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 1px 2px rgb(var(--shadow-rgb) / 0.06), 0 2px 8px -2px rgb(var(--shadow-rgb) / 0.08);
+  --shadow-lift: 0 2px 4px rgb(var(--shadow-rgb) / 0.06), 0 12px 24px -8px rgb(var(--shadow-rgb) / 0.18);
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ---------- Fonts ---------- */
@@ -94,6 +109,7 @@ a:hover {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+  border-radius: var(--radius-sm);
 }
 
 p {
@@ -156,18 +172,20 @@ body::after {
 .section-title {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 0 0 20px;
+  gap: 12px;
+  margin: 0 0 24px;
   font-family: var(--font-pixel);
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
 }
 
 .section-title::before {
   content: "";
-  width: 8px;
-  height: 8px;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
   background: var(--accent);
 }
 
@@ -181,6 +199,7 @@ body::after {
   display: inline-block;
   padding: 1px 8px;
   border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--muted);
@@ -193,7 +212,7 @@ body::after {
   clip-path: inset(0 0 0 0);
 }
 .js .reveal:not(.is-visible) .section-title {
-  clip-path: inset(0 calc(100% - 18px) 0 0);
+  clip-path: inset(0 calc(100% - 24px) 0 0);
 }
 .js .reveal:not(.is-visible) .section-title::before {
   background: var(--g0);
@@ -207,7 +226,7 @@ body::after {
 
 @keyframes title-wipe {
   from {
-    clip-path: inset(0 calc(100% - 18px) 0 0);
+    clip-path: inset(0 calc(100% - 24px) 0 0);
   }
 }
 
