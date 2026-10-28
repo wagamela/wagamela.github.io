@@ -19,12 +19,24 @@ export const profile = {
 // icon: one of "github", "linkedin", "instagram", "x", "steam", "itch", "email" (pixel icons in SocialIcon.astro).
 export const socials: { label: string; href: string; icon?: string }[] = [
   { label: "GitHub", href: "https://github.com/wagamela", icon: "github" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name", icon: "linkedin" }, // TODO
-  { label: "Instagram", href: "https://www.instagram.com/your-name", icon: "instagram" }, // TODO
-  { label: "X", href: "https://x.com/your-name", icon: "x" }, // TODO
-  { label: "Steam", href: "https://steamcommunity.com/id/your-name", icon: "steam" }, // TODO
-  { label: "itch.io", href: "https://your-name.itch.io", icon: "itch" }, // TODO
-  { label: "Email", href: "mailto:you@example.com", icon: "email" }, // TODO
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/emir-akbulut-993564302/",
+    icon: "linkedin",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/emirakblutt/",
+    icon: "instagram",
+  }, // TODO
+  { label: "X", href: "https://x.com/wagamelaa", icon: "x" }, // TODO
+  {
+    label: "Steam",
+    href: "https://steamcommunity.com/id/wagamela/",
+    icon: "steam",
+  }, // TODO
+  { label: "itch.io", href: "https://wagamela.itch.io/", icon: "itch" }, // TODO
+  { label: "Email", href: "mailto:wagamela.dev@gmail.com", icon: "email" }, // TODO
 ];
 
 export type Experience = {
