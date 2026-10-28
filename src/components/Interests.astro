@@ -3,7 +3,7 @@ import { interests } from "../data/profile";
 ---
 
 <section class="container section reveal" id="interests">
-  <h2 class="section-title">When I'm not coding</h2>
+  <h2 class="section-title">My interests</h2>
   <ul class="chips">
     {interests.map((item, i) => <li style={`--l:var(--g${(i % 3) + 2})`}>{item}</li>)}
   </ul>

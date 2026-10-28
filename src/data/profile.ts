@@ -5,14 +5,13 @@
 export const profile = {
   name: "wagamela",
   githubUser: "wagamela",
-  // One short line under your name.
-  tagline: "Student developer who likes building things for the web.", // TODO
-  location: "Türkiye", // TODO
-  status: "Studying IT at a vocational high school", // TODO
+  tagline: "Student developer who likes building things and learn.",
+  location: "Türkiye",
+  status: "Studying IT at OIBMTAL High School", // TODO
   // Your bio. Each string becomes its own paragraph.
   bio: [
-    "Hi, I'm Emir. I'm a student in the IT class of a vocational high school, and I spend most of my free time writing code.", // TODO
-    "I like turning small ideas into working projects, learning how things work under the hood, and sharing what I build on GitHub.", // TODO
+    "Hi, I'm Emir. I'm a student in the IT class of a vocational high school, and I spend most of my free time developing small projects.",
+    "I like to learn about new technologies and how to apply them in creative ways. I mostly like to work on frontend development, but I also enjoy learning about backend and game development.",
   ],
 };
 
@@ -55,9 +54,9 @@ export const experience: Experience[] = [
     company: "Raynet",
     logo: "RaynetLogo.svg",
     role: "Software Development Intern",
-    period: "2025 · 3 months", // TODO: e.g. "Jun – Aug 2025"
+    period: "Apr - July 2026 · 3 months", // TODO: e.g. "Jun – Aug 2025"
     description:
-      "Three-month internship. Write a sentence or two about what you worked on and what you learned.", // TODO
+      "Three-month internship via Erasmus+ project. My first experience in a professional development environment.", // TODO
   },
 ];
 
@@ -95,9 +94,14 @@ export const projects: Project[] = [
 
 // Short words or phrases. Add an emoji if you like, or keep them plain.
 export const interests: string[] = [
-  "Web development", // TODO
-  "Open source", // TODO
-  "Linux", // TODO
-  "Gaming", // TODO
-  "Music", // TODO
+  "Web development",
+  "Game development",
+  "Open source",
+  "Linux",
+  "Gaming",
+  "Football",
+  "Basketball",
+  "Speedcubing",
+  "Electronics",
+  "Jersey design",
 ];
