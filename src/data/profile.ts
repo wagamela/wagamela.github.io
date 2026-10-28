@@ -16,11 +16,15 @@ export const profile = {
   ],
 };
 
-export const socials: { label: string; href: string }[] = [
-  { label: "GitHub", href: "https://github.com/wagamela" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name" }, // TODO
-  { label: "X", href: "https://x.com/your-name" }, // TODO
-  { label: "Email", href: "mailto:you@example.com" }, // TODO
+// icon: one of "github", "linkedin", "instagram", "x", "steam", "itch", "email" (pixel icons in SocialIcon.astro).
+export const socials: { label: string; href: string; icon?: string }[] = [
+  { label: "GitHub", href: "https://github.com/wagamela", icon: "github" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name", icon: "linkedin" }, // TODO
+  { label: "Instagram", href: "https://www.instagram.com/your-name", icon: "instagram" }, // TODO
+  { label: "X", href: "https://x.com/your-name", icon: "x" }, // TODO
+  { label: "Steam", href: "https://steamcommunity.com/id/your-name", icon: "steam" }, // TODO
+  { label: "itch.io", href: "https://your-name.itch.io", icon: "itch" }, // TODO
+  { label: "Email", href: "mailto:you@example.com", icon: "email" }, // TODO
 ];
 
 export type Experience = {
@@ -28,6 +32,8 @@ export type Experience = {
   role: string;
   period: string;
   href?: string;
+  // Logo file in /public, e.g. "RaynetLogo.svg". Shown in a frame beside the entry.
+  logo?: string;
   description: string;
 };
 
@@ -35,6 +41,7 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     company: "Raynet",
+    logo: "RaynetLogo.svg",
     role: "Software Development Intern",
     period: "2025 · 3 months", // TODO: e.g. "Jun – Aug 2025"
     description:

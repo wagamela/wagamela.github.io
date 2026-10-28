@@ -1,0 +1,39 @@
+---
+// Quiet background for the page below the hero: the hero's 13px contribution grid,
+// reduced to faint dots.
+---
+
+<div class="texture" aria-hidden="true">
+<svg class="layer">
+  <defs>
+    <pattern id="texture-dots" width="13" height="13" patternUnits="userSpaceOnUse">
+      <rect x="4" y="4" width="2" height="2" class="dot" />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#texture-dots)" />
+</svg>
+</div>
+
+<style>
+  .texture {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    /* Fade in under the hero and out above the footer. */
+    mask-image: linear-gradient(to bottom, transparent, #000 160px, #000 calc(100% - 160px), transparent);
+  }
+
+  .layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    shape-rendering: crispEdges;
+  }
+
+  .dot {
+    fill: var(--border);
+  }
+
+</style>
