@@ -1,6 +1,7 @@
 ---
 import { profile, socials } from "../data/profile";
 import PixelArrow from "./PixelArrow.astro";
+import SocialIcon from "./SocialIcon.astro";
 ---
 
 <section class="container section reveal" id="about">
@@ -11,6 +12,7 @@ import PixelArrow from "./PixelArrow.astro";
       socials.map((s) => (
         <li>
           <a href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
+            {s.icon && <SocialIcon name={s.icon} />}
             {s.label}
             <PixelArrow />
           </a>
@@ -32,22 +34,43 @@ import PixelArrow from "./PixelArrow.astro";
     font-size: 0.875rem;
   }
 
-  /* A green fill steps in from the left on hover, like a cell filling up. */
+  /* A green fill sweeps in from the left on hover, like a cell filling up.
+     Scaling a pseudo-element stays on the compositor, so it never repaints. */
   .links a {
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 6px 12px;
     border: 1px solid var(--border);
-    background: linear-gradient(var(--g1), var(--g1)) no-repeat left / 0 100%;
     text-decoration: none;
-    transition: background-size 0.24s steps(4, end), border-color 0.15s;
+    transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .links a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--g1);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .links a:hover,
   .links a:focus-visible {
     border-color: var(--accent);
-    background-size: 100% 100%;
+  }
+
+  .links a:hover::before,
+  .links a:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  .links a :global(.pixel-arrow) {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .links a:hover :global(.pixel-arrow),

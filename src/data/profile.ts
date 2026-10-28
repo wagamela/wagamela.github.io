@@ -16,11 +16,12 @@ export const profile = {
   ],
 };
 
-export const socials: { label: string; href: string }[] = [
-  { label: "GitHub", href: "https://github.com/wagamela" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name" }, // TODO
-  { label: "X", href: "https://x.com/your-name" }, // TODO
-  { label: "Email", href: "mailto:you@example.com" }, // TODO
+// icon: one of "github", "linkedin", "x", "email" (pixel icons in SocialIcon.astro).
+export const socials: { label: string; href: string; icon?: string }[] = [
+  { label: "GitHub", href: "https://github.com/wagamela", icon: "github" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name", icon: "linkedin" }, // TODO
+  { label: "X", href: "https://x.com/your-name", icon: "x" }, // TODO
+  { label: "Email", href: "mailto:you@example.com", icon: "email" }, // TODO
 ];
 
 export type Experience = {
