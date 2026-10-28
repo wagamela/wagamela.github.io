@@ -5,7 +5,7 @@
 export const profile = {
   name: "wagamela",
   githubUser: "wagamela",
-  tagline: "Student developer who likes building things and learn.",
+  tagline: "Student developer who likes building things and learning.",
   location: "Türkiye",
   status: "Studying IT at OIBMTAL High School", // TODO
   // Your bio. Each string becomes its own paragraph.
