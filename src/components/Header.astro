@@ -30,14 +30,18 @@ import { profile } from "../data/profile";
     height: 36px;
     padding: 0;
     border: 1px solid var(--border);
-    background: transparent;
+    border-radius: var(--radius);
+    background: var(--bg);
+    box-shadow: var(--shadow);
     color: var(--text);
     cursor: pointer;
+    transition: border-color 0.3s var(--ease-soft), color 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
   }
 
   .theme-toggle:hover {
     border-color: var(--accent);
     color: var(--accent);
+    box-shadow: var(--shadow-lift);
   }
 
   /* Show the moon in light mode (click to go dark) and the sun in dark mode. */
