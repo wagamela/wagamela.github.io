@@ -7,15 +7,13 @@ export const profile = {
   githubUser: "wagamela",
   tagline: "Student developer who likes building things and learning.",
   location: "Türkiye",
-  status: "Studying IT at OIBMTAL High School", // TODO
-  // Your bio. Each string becomes its own paragraph.
+  status: "Studying IT at OIBMTAL High School",
   bio: [
     "Hi, I'm Emir. I'm a student in the IT class of a vocational high school, and I spend most of my free time developing small projects.",
     "I like to learn about new technologies and how to apply them in creative ways. I mostly like to work on frontend development, but I also enjoy learning about backend and game development.",
   ],
 };
 
-// icon: one of "github", "linkedin", "instagram", "x", "steam", "itch", "email" (pixel icons in SocialIcon.astro).
 export const socials: { label: string; href: string; icon?: string }[] = [
   { label: "GitHub", href: "https://github.com/wagamela", icon: "github" },
   {
@@ -27,15 +25,15 @@ export const socials: { label: string; href: string; icon?: string }[] = [
     label: "Instagram",
     href: "https://www.instagram.com/emirakblutt/",
     icon: "instagram",
-  }, // TODO
-  { label: "X", href: "https://x.com/wagamelaa", icon: "x" }, // TODO
+  },
+  { label: "X", href: "https://x.com/wagamelaa", icon: "x" },
   {
     label: "Steam",
     href: "https://steamcommunity.com/id/wagamela/",
     icon: "steam",
-  }, // TODO
-  { label: "itch.io", href: "https://wagamela.itch.io/", icon: "itch" }, // TODO
-  { label: "Email", href: "mailto:wagamela.dev@gmail.com", icon: "email" }, // TODO
+  },
+  { label: "itch.io", href: "https://wagamela.itch.io/", icon: "itch" },
+  { label: "Email", href: "mailto:wagamela.dev@gmail.com", icon: "email" },
 ];
 
 export type Experience = {
@@ -43,7 +41,6 @@ export type Experience = {
   role: string;
   period: string;
   href?: string;
-  // Logo file in /public, e.g. "RaynetLogo.svg". Shown in a frame beside the entry.
   logo?: string;
   description: string;
 };
@@ -54,9 +51,9 @@ export const experience: Experience[] = [
     company: "Raynet",
     logo: "RaynetLogo.svg",
     role: "Software Development Intern",
-    period: "Apr - July 2026 · 3 months", // TODO: e.g. "Jun – Aug 2025"
+    period: "Apr - July 2026 · 3 months",
     description:
-      "Three-month internship via Erasmus+ project. My first experience in a professional development environment.", // TODO
+      "Three-month internship via Erasmus+ project. My first experience in a professional development environment.",
   },
 ];
 
@@ -66,33 +63,61 @@ export type Project = {
   tags: string[];
   href?: string;
   status: "current" | "past";
+  // Longer write-up shown on the Projects page. Each string becomes its own paragraph.
+  details?: string[];
+  // Screenshot or photo in /public, e.g. "portfolio.png", shown in the project's frame.
+  // Leave it out and the frame shows an empty image slot.
+  image?: string;
+  // Describe the image for screen readers, e.g. "Home page in dark mode".
+  imageAlt?: string;
 };
 
 export const projects: Project[] = [
   {
     name: "Portfolio",
-    description:
-      "This site. Built with Astro, a pixel font and a homemade contribution graph.",
+    description: "This site. A simple portfolio site built with Astro.",
     tags: ["Astro", "TypeScript", "CSS"],
     href: "https://github.com/wagamela/wagamela.github.io",
     status: "current",
+    details: [
+      "This is a simple portfolio site I built to showcase my work, skills and interests to people.", // TODO
+    ],
   },
   {
-    name: "Project name", // TODO
-    description: "One or two sentences about what it does and why you made it.", // TODO
-    tags: ["Tag", "Tag"], // TODO
-    href: "https://github.com/wagamela",
-    status: "current",
-  },
-  {
-    name: "Older project", // TODO
-    description: "Something you built before. School projects count too.", // TODO
-    tags: ["Tag"], // TODO
+    name: "Who's With Me", // TODO
+    description:
+      "Who's With Me is a desktop game that developed with Unity for Egitijam26.", // TODO
+    tags: ["Unity", "C#", "Game Development"], // TODO
+    href: "https://wagamela.itch.io/whos-with-me",
     status: "past",
+    details: [
+      "Who's With Me is a game that players are trying to control two different characters that are in the same universe but not in the same reality.",
+    ],
+  },
+  {
+    name: "Teknofest Efficiency Challenge 2025 - AKS",
+    description:
+      "I have participated in the Teknofest Efficiency Challenge 2025 as part of the Bolat team with the responsibilty of developing the AKS (Vehicle Control System) software.", // TODO
+    tags: ["Electronics", "Software Development", "Embedded Systems"],
+    status: "past",
+    details: [
+      "I contributed my team as the responsible developer for the AKS (Vehicle Control System) software. AKS is basically a embedded system for measuring various data from vehicle and manage the control of the vehicle. I developed the software using C++ and Arduino IDE. I also designed display for the vehicle with Nextion.",
+    ],
   },
 ];
 
-// Short words or phrases. Add an emoji if you like, or keep them plain.
+// Extra sections on the About page, below the short bio. Each string in "paragraphs" is its own paragraph.
+export const aboutSections: { title: string; paragraphs: string[] }[] = [
+  {
+    title: "How I got into coding", // TODO
+    paragraphs: ["Your story here."], // TODO
+  },
+  {
+    title: "What I'm learning now", // TODO
+    paragraphs: ["Tools, languages or topics you're working through."], // TODO
+  },
+];
+
 export const interests: string[] = [
   "Web development",
   "Game development",
