@@ -21,7 +21,7 @@ A real student developer's site that shows its own activity: a live GitHub contr
 - Deploys from `main` via GitHub Actions to GitHub Pages, with a daily rebuild to refresh contributions.
 
 ## Capabilities and Constraints
-- Astro static site, single page (`src/pages/index.astro`), sections: Hero, About, Experience, Projects, Interests, ContributionGraph, Footer.
+- Astro static site: home (`src/pages/index.astro`) plus `/projects` and `/about` detail pages. Home sections: Hero, About, Experience, Projects, Interests, ContributionGraph, Footer.
 - Contribution data is fetched from GitHub at build time (`src/lib/contributions.ts`); `SAMPLE_CONTRIBUTIONS=1` fakes it locally.
 - **Bilingual: English and Turkish are both required.** The site is English-only today; how languages are switched or routed is undecided.
 - All content must stay editable from the data file, not hard-coded in components.

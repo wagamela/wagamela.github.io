@@ -1,0 +1,210 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import PixelArrow from "../components/PixelArrow.astro";
+import PixelTexture from "../components/PixelTexture.astro";
+import { profile, projects } from "../data/profile";
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+---
+
+<Base title={`Projects · ${profile.name}`} description={`Projects by ${profile.name}`}>
+  <Header />
+  <main class="textured">
+    <PixelTexture />
+    <section class="container section">
+      <!-- The heading is its own reveal target: the whole list is too tall to reach the 15% threshold on phones. -->
+      <div class="reveal">
+        <h1 class="section-title">Projects</h1>
+      </div>
+      <ul class="projects">
+        {
+          projects.map((p) => (
+            <li>
+              <article class="frame">
+                <div class="shot">
+                  {p.image ? (
+                    <img src={`${base}${p.image}`} alt={p.imageAlt ?? ""} loading="lazy" />
+                  ) : (
+                    <div class="empty">
+                      <!-- Pixel picture: a frame with a sun and a hill, on an 8×8 grid -->
+                      <svg viewBox="0 0 8 8" width="32" height="32" shape-rendering="crispEdges" aria-hidden="true">
+                        <path fill="currentColor" d="M0 0h8v1H0zM0 7h8v1H0zM0 1h1v6H0zM7 1h1v6H7zM5 2h1v1H5zM1 5h1v2H1zM2 4h1v3H2zM3 5h1v2H3zM4 6h3v1H4z" />
+                      </svg>
+                      <span class="mono">Image coming soon</span>
+                    </div>
+                  )}
+                </div>
+                <div class="body">
+                  <h2>{p.name}</h2>
+                  <div class="tags">
+                    {p.tags.map((t) => (
+                      <span class="tag">{t}</span>
+                    ))}
+                  </div>
+                  <p class="lead">{p.description}</p>
+                  {p.details?.map((d) => <p>{d}</p>)}
+                  {p.href && (
+                    <a class="link mono" href={p.href} target="_blank" rel="noopener">
+                      {new URL(p.href).hostname}
+                      <PixelArrow />
+                    </a>
+                  )}
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .projects {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .frame {
+    position: relative;
+    display: grid;
+    gap: 20px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg);
+    box-shadow: var(--shadow);
+    transition: border-color 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
+  }
+
+  @media (min-width: 720px) {
+    .frame {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: 28px;
+      padding: 20px;
+    }
+  }
+
+  /* Same corner pixels as the home page cards, lit when the frame is hovered. */
+  .frame::before,
+  .frame::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    transform: scale(0);
+    transition: transform 0.2s steps(3, end);
+  }
+  .frame::before {
+    top: 6px;
+    left: 6px;
+  }
+  .frame::after {
+    right: 6px;
+    bottom: 6px;
+  }
+
+  .frame:hover,
+  .frame:has(:focus-visible) {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-lift);
+  }
+  .frame:hover::before,
+  .frame:hover::after,
+  .frame:has(:focus-visible)::before,
+  .frame:has(:focus-visible)::after {
+    transform: scale(1);
+  }
+
+  .shot {
+    align-self: start;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Empty slot: a faint checkerboard of graph cells, so it reads as "image goes here". */
+  .empty {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 8px;
+    height: 100%;
+    color: var(--muted);
+    background-image: conic-gradient(var(--g0) 25%, transparent 0 50%, var(--g0) 0 75%, transparent 0);
+    background-size: 16px 16px;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    font-family: var(--font-pixel);
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+    text-wrap: balance;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    max-width: 68ch;
+    margin: 0 0 12px;
+    color: var(--muted);
+  }
+
+  .lead {
+    color: var(--text);
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: border-color 0.3s var(--ease-soft), background-color 0.3s var(--ease-soft);
+  }
+
+  .link:hover,
+  .link:focus-visible {
+    border-color: var(--accent);
+    background: var(--g1);
+  }
+
+  .link :global(.pixel-arrow) {
+    flex-shrink: 0;
+    transition: transform 0.35s var(--ease-soft);
+  }
+  .link:hover :global(.pixel-arrow),
+  .link:focus-visible :global(.pixel-arrow) {
+    transform: translate(2px, -2px);
+  }
+</style>

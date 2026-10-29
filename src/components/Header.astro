@@ -1,9 +1,20 @@
 ---
 import { profile } from "../data/profile";
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const here = Astro.url.pathname.replace(/\/?$/, "/");
+const links = [
+  { label: "Home", href: base },
+  { label: "Projects", href: `${base}projects/` },
+  { label: "About", href: `${base}about/` },
+];
 ---
 
 <header class="container header">
-  <span class="mono handle">@{profile.githubUser}</span>
+  <a class="mono handle" href={base}>@{profile.githubUser}</a>
+  <nav class="mono nav">
+    {links.map((l) => <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>)}
+  </nav>
   <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
     <!-- Pixel sun / moon, drawn on an 8×8 grid -->
     <svg class="icon-sun" viewBox="0 0 8 8" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true">
@@ -20,7 +31,28 @@ import { profile } from "../data/profile";
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     padding-top: 24px;
+  }
+
+  .handle {
+    text-decoration: none;
+  }
+
+  .nav {
+    display: flex;
+    gap: 16px;
+    margin-left: auto;
+  }
+
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .nav a:hover,
+  .nav a[aria-current="page"] {
+    color: var(--accent);
   }
 
   .theme-toggle {
