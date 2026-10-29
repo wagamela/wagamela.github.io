@@ -49,6 +49,7 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     company: "Raynet",
+    href: "https://raynet-inc.com",
     logo: "RaynetLogo.svg",
     role: "Software Development Intern",
     period: "Apr - July 2026 · 3 months",
