@@ -76,7 +76,7 @@ export const projects: Project[] = [
     tags: ["Astro", "TypeScript", "CSS"],
     href: "https://github.com/wagamela/wagamela.github.io",
     status: "current",
-    image: "portfolio.png",
+    image: "projects/portfolio.png",
     details: [
       "This is a simple portfolio site I built to showcase my work, skills and interests to people.", // TODO
     ],
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     tags: ["Unity", "C#", "Game Development"],
     href: "https://wagamela.itch.io/whos-with-me",
     status: "past",
-    image: "whos-with-me.png",
+    image: "projects/whos-with-me.png",
     imageAlt: "A blue and a red character facing each other under a green swirling portal",
     details: [
       "Who's With Me is a game that players are trying to control two different characters that are in the same universe but not in the same reality.",
@@ -100,7 +100,7 @@ export const projects: Project[] = [
       "I have participated in the Teknofest Efficiency Challenge 2025 as part of the Bolat team with the responsibilty of developing the AKS (Vehicle Control System) software.", // TODO
     tags: ["Electronics", "Software Development", "Embedded Systems"],
     status: "past",
-    image: "aks.png",
+    image: "projects/aks.png",
     details: [
       "I contributed my team as the responsible developer for the AKS (Vehicle Control System) software. AKS is basically a embedded system for measuring various data from vehicle and manage the control of the vehicle. I developed the software using C++ and Arduino IDE. I also designed display for the vehicle with Nextion.",
     ],
