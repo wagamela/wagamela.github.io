@@ -8,23 +8,26 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
   <h2 class="section-title">Experience</h2>
   <ol class="timeline">
     {
-      experience.map((job) => (
+      experience.map((job) => {
+        const Frame = job.href ? "a" : "div";
+        return (
         <li class:list={{ "has-logo": job.logo }}>
           {job.logo && (
-            <div class="frame">
+            <Frame class="frame" href={job.href} target={job.href && "_blank"} rel={job.href && "noopener"} aria-label={job.href && job.company}>
               <img class="logo" src={`${base}${job.logo}`} alt="" />
-            </div>
+            </Frame>
           )}
           <div>
             <div class="head">
-              <h3>{job.href ? <a href={job.href}>{job.company}</a> : job.company}</h3>
+              <h3>{job.href ? <a href={job.href} target="_blank" rel="noopener">{job.company}</a> : job.company}</h3>
               <span class="mono">{job.period}</span>
             </div>
             <p class="role">{job.role}</p>
             <p class="description">{job.description}</p>
           </div>
         </li>
-      ))
+        );
+      })
     }
   </ol>
 </section>

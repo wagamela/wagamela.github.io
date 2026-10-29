@@ -123,7 +123,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
 <script>
   // A field of contribution squares that light up around the pointer, ripple on tap,
-  // and spark now and then on their own. Squares behind the text stay unlit so it reads.
+  // and spark now and then on their own.
   const hero = document.querySelector<HTMLElement>(".hero")!;
   const canvas = hero.querySelector("canvas")!;
   const ctx = canvas.getContext("2d")!;
@@ -138,7 +138,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
   let rows = 0;
   let ox = 0;
   let energy = new Float32Array(0);
-  let cap = new Float32Array(0);
   let colors: string[] = [];
   let ripples: { x: number; y: number; t: number }[] = [];
   let pointer: { x: number; y: number } | null = null;
@@ -160,17 +159,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     cols = Math.ceil(width / STEP) + 1;
     rows = Math.ceil(height / STEP);
     energy = new Float32Array(cols * rows);
-    cap = new Float32Array(cols * rows).fill(1);
-    const box = canvas.getBoundingClientRect();
-    for (const el of content.children) {
-      const r = el.getBoundingClientRect();
-      const c0 = Math.floor((r.left - box.left - ox - 6) / STEP) + 1;
-      const c1 = Math.ceil((r.right - box.left - ox + 6) / STEP) + 1;
-      const r0 = Math.floor((r.top - box.top - 6) / STEP);
-      const r1 = Math.ceil((r.bottom - box.top + 6) / STEP);
-      for (let y = Math.max(r0, 0); y < Math.min(r1, rows); y++)
-        for (let x = Math.max(c0, 0); x < Math.min(c1, cols); x++) cap[y * cols + x] = LEVELS[0] - 0.01;
-    }
   };
 
   const toCell = (px: number, py: number) => ({ x: (px - ox) / STEP + 1, y: py / STEP });
@@ -220,8 +208,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
       ctx.fillStyle = colors[level];
       for (let y = 0; y < rows; y++)
         for (let x = 0; x < cols; x++) {
-          const i = y * cols + x;
-          const e = Math.min(energy[i], cap[i]);
+          const e = energy[y * cols + x];
           let l = 0;
           while (l < 4 && e >= LEVELS[l]) l++;
           if (l === level) ctx.fillRect(ox + (x - 1) * STEP, y * STEP, CELL, CELL);
