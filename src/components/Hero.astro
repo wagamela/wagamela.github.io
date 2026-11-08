@@ -246,16 +246,22 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     }).observe(hero);
     document.addEventListener("visibilitychange", () => setRunning(onScreen && !document.hidden));
 
-    const local = (e: PointerEvent) => {
+    const local = (e: { clientX: number; clientY: number }) => {
       const box = canvas.getBoundingClientRect();
       return toCell(e.clientX - box.left, e.clientY - box.top);
+    };
+    const clear = () => {
+      pointer = last = null;
     };
     hero.addEventListener("pointermove", (e) => {
       pointer = local(e);
     });
-    hero.addEventListener("pointerleave", () => {
-      pointer = last = null;
-    });
+    hero.addEventListener("pointerleave", clear);
+    // Touch: the browser cancels pointer events once a swipe turns into a scroll,
+    // but touchmove keeps firing, so the trail follows the finger without blocking scroll.
+    hero.addEventListener("touchmove", (e) => (pointer = local(e.touches[0])), { passive: true });
+    hero.addEventListener("touchend", clear);
+    hero.addEventListener("touchcancel", clear);
     hero.addEventListener("pointerdown", (e) => {
       ripples.push({ ...local(e), t: performance.now() });
     });
