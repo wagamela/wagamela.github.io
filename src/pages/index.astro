@@ -10,12 +10,9 @@ import Interests from "../components/Interests.astro";
 import Footer from "../components/Footer.astro";
 import PixelTexture from "../components/PixelTexture.astro";
 import { profile } from "../data/profile";
-import { getLang } from "../i18n";
-
-const lang = getLang(Astro.url);
 ---
 
-<Base title={profile.name} description={profile.tagline[lang]}>
+<Base title={profile.name} description={profile.tagline}>
   <Header />
   <main>
     <Hero />

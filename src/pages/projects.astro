@@ -5,22 +5,18 @@ import Footer from "../components/Footer.astro";
 import PixelArrow from "../components/PixelArrow.astro";
 import PixelTexture from "../components/PixelTexture.astro";
 import { profile, projects } from "../data/profile";
-import { getLang, pick, ui } from "../i18n";
-
-const lang = getLang(Astro.url);
-const t = ui[lang];
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
-<Base title={`${t.projects} · ${profile.name}`} description={t.projectsBy(profile.name)}>
+<Base title={`Projects · ${profile.name}`} description={`Projects by ${profile.name}`}>
   <Header />
   <main class="textured">
     <PixelTexture />
     <section class="container section">
       <!-- The heading is its own reveal target: the whole list is too tall to reach the 15% threshold on phones. -->
       <div class="reveal">
-        <h1 class="section-title">{t.projects}</h1>
+        <h1 class="section-title">Projects</h1>
       </div>
       <ul class="projects">
         {
@@ -29,26 +25,26 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
               <article class="frame">
                 <div class="shot">
                   {p.image ? (
-                    <img src={`${base}${p.image}`} alt={p.imageAlt?.[lang] ?? ""} loading="lazy" />
+                    <img src={`${base}${p.image}`} alt={p.imageAlt ?? ""} loading="lazy" />
                   ) : (
                     <div class="empty">
                       <!-- Pixel picture: a frame with a sun and a hill, on an 8×8 grid -->
                       <svg viewBox="0 0 8 8" width="32" height="32" shape-rendering="crispEdges" aria-hidden="true">
                         <path fill="currentColor" d="M0 0h8v1H0zM0 7h8v1H0zM0 1h1v6H0zM7 1h1v6H7zM5 2h1v1H5zM1 5h1v2H1zM2 4h1v3H2zM3 5h1v2H3zM4 6h3v1H4z" />
                       </svg>
-                      <span class="mono">{t.imageSoon}</span>
+                      <span class="mono">Image coming soon</span>
                     </div>
                   )}
                 </div>
                 <div class="body">
-                  <h2>{pick(p.name, lang)}</h2>
+                  <h2>{p.name}</h2>
                   <div class="tags">
-                    {p.tags.map((tag) => (
-                      <span class="tag">{pick(tag, lang)}</span>
+                    {p.tags.map((t) => (
+                      <span class="tag">{t}</span>
                     ))}
                   </div>
-                  <p class="lead">{p.description[lang]}</p>
-                  {p.details?.[lang].map((d) => <p>{d}</p>)}
+                  <p class="lead">{p.description}</p>
+                  {p.details?.map((d) => <p>{d}</p>)}
                   {p.href && (
                     <a class="link mono" href={p.href} target="_blank" rel="noopener">
                       {new URL(p.href).hostname}

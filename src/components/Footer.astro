@@ -1,16 +1,12 @@
 ---
 import { profile } from "../data/profile";
-import { getLang, ui } from "../i18n";
 
-const lang = getLang(Astro.url);
-const [before, after] = ui[lang].builtWith;
-
-const built = new Intl.DateTimeFormat(lang, { month: "short", day: "numeric", year: "numeric" }).format(new Date());
+const built = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(new Date());
 ---
 
 <footer class="container footer mono">
   <span>© {new Date().getFullYear()} {profile.name}</span>
-  <span>{before}<a href="https://astro.build">Astro</a>{after}{built}</span>
+  <span>Hand-built with <a href="https://astro.build">Astro</a> · rebuilt daily, last on {built}</span>
 </footer>
 
 <style>

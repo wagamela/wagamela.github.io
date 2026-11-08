@@ -1,15 +1,12 @@
 ---
 import { getCalendar } from "../lib/contributions";
 import PixelArrow from "./PixelArrow.astro";
-import { getLang, ui } from "../i18n";
 
 interface Props {
   user: string;
 }
 
 const { user } = Astro.props;
-const lang = getLang(Astro.url);
-const t = ui[lang];
 const calendar = await getCalendar(user);
 
 const CELL = 10;
@@ -20,8 +17,8 @@ const TOP = 18; // room for month labels
 const width = LEFT + calendar.weeks.length * STEP;
 const height = TOP + 7 * STEP;
 
-const dateFormat = new Intl.DateTimeFormat(lang, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
-const monthFormat = new Intl.DateTimeFormat(lang, { month: "short", timeZone: "UTC" });
+const dateFormat = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const monthFormat = new Intl.DateTimeFormat("en", { month: "short", timeZone: "UTC" });
 
 // A month label goes above the first week that starts in a new month.
 const months: { x: number; label: string }[] = [];
@@ -35,10 +32,8 @@ calendar.weeks.forEach((week, i) => {
   }
 });
 
-const describe = (count: number, date: string) => t.contributionOn(count, dateFormat.format(new Date(`${date}T00:00:00Z`)));
-// Jan 1, 3 and 5 2024 were a Monday, Wednesday and Friday.
-const weekdayFormat = new Intl.DateTimeFormat(lang, { weekday: "short", timeZone: "UTC" });
-const weekdays = ["01", "03", "05"].map((d) => weekdayFormat.format(new Date(`2024-01-${d}T00:00:00Z`)));
+const describe = (count: number, date: string) =>
+  `${count === 0 ? "No" : count} contribution${count === 1 ? "" : "s"} on ${dateFormat.format(new Date(`${date}T00:00:00Z`))}`;
 
 // Delay for the "fill in" animation: sweeps left to right with a little jitter.
 let seed = 7;
@@ -46,18 +41,18 @@ const jitter = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 160;
 ---
 
 <section class="container section reveal" id="contributions">
-  <h2 class="section-title">{t.contributions}</h2>
+  <h2 class="section-title">Contributions</h2>
   {
     calendar.source === "none" ? (
       <p class="mono">
-        {t.graphFailed}{" "}
-        <a href={`https://github.com/${user}`}>{t.seeOnGitHub} <PixelArrow /></a>
+        Couldn't load the graph right now.{" "}
+        <a href={`https://github.com/${user}`}>See it on GitHub <PixelArrow /></a>
       </p>
     ) : (
       <>
         <p class="mono summary">
-          <strong>{calendar.total.toLocaleString(lang)}</strong> {t.inLastYear}
-          {calendar.source === "sample" && t.sampleData}
+          <strong>{calendar.total.toLocaleString("en")}</strong> contributions in the last year
+          {calendar.source === "sample" && " (sample data)"}
         </p>
         <div class="scroller">
           <svg
@@ -68,14 +63,14 @@ const jitter = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 160;
             style={`min-width: ${width}px`}
             shape-rendering="crispEdges"
             role="img"
-            aria-label={t.contributionsLabel(calendar.total)}
+            aria-label={`${calendar.total} GitHub contributions in the last year`}
           >
             {months.map((m) => (
               <text x={m.x} y="10" class="label">
                 {m.label}
               </text>
             ))}
-            {weekdays.map((d, i) => (
+            {["Mon", "Wed", "Fri"].map((d, i) => (
               <text x="0" y={TOP + (i * 2 + 1) * STEP + CELL - 1} class="label">
                 {d}
               </text>
@@ -104,11 +99,11 @@ const jitter = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 160;
         <div class="footer mono">
           <span>{new Date().getUTCFullYear()}</span>
           <span class="legend" aria-hidden="true">
-            {t.less}
+            Less
             {[0, 1, 2, 3, 4].map((l) => (
               <i class={`l${l}`} />
             ))}
-            {t.more}
+            More
           </span>
         </div>
       </>
