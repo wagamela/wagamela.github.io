@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { getLang, languages, localize, type Lang } from "../i18n";
 
 interface Props {
   title: string;
@@ -8,10 +9,11 @@ interface Props {
 
 const { title, description } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const lang = getLang(Astro.url);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,6 +23,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     <meta property="og:description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    {(Object.keys(languages) as Lang[]).map((l) => <link rel="alternate" hreflang={l} href={new URL(localize(Astro.url, l), Astro.site)} />)}
     <script is:inline>
       // Runs before paint: mark JS as available and apply a saved theme
       // so the page never flashes the wrong colors.

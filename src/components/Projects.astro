@@ -1,15 +1,19 @@
 ---
 import { projects, type Project } from "../data/profile";
 import PixelArrow from "./PixelArrow.astro";
+import { getLang, pick, ui } from "../i18n";
+
+const lang = getLang(Astro.url);
+const t = ui[lang];
 
 const groups: { title: string; items: Project[] }[] = [
-  { title: "Now building", items: projects.filter((p) => p.status === "current") },
-  { title: "Earlier", items: projects.filter((p) => p.status === "past") },
+  { title: t.nowBuilding, items: projects.filter((p) => p.status === "current") },
+  { title: t.earlier, items: projects.filter((p) => p.status === "past") },
 ].filter((g) => g.items.length > 0);
 ---
 
 <section class="container section reveal" id="projects">
-  <h2 class="section-title">Projects</h2>
+  <h2 class="section-title">{t.projects}</h2>
   {
     groups.map((group) => (
       <div class="group">
@@ -18,13 +22,13 @@ const groups: { title: string; items: Project[] }[] = [
           {group.items.map((p) => (
             <li class="card">
               <div class="head">
-                <h4>{p.href ? <a href={p.href}>{p.name}</a> : p.name}</h4>
+                <h4>{p.href ? <a href={p.href}>{pick(p.name, lang)}</a> : pick(p.name, lang)}</h4>
                 {p.href && <PixelArrow />}
               </div>
-              <p>{p.description}</p>
+              <p>{p.description[lang]}</p>
               <div class="tags">
-                {p.tags.map((t) => (
-                  <span class="tag">{t}</span>
+                {p.tags.map((tag) => (
+                  <span class="tag">{pick(tag, lang)}</span>
                 ))}
               </div>
             </li>
