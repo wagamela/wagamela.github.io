@@ -266,7 +266,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     hero.addEventListener("touchend", clear);
     hero.addEventListener("touchcancel", clear);
     hero.addEventListener("pointerdown", (e) => {
-      ripples.push({ ...local(e), t: performance.now() });
+      // Touch gets the swipe trail only; the click ripple is for mouse and pen.
+      if (e.pointerType !== "touch") ripples.push({ ...local(e), t: performance.now() });
     });
 
     // Opening ripple from the avatar.
