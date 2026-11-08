@@ -1,12 +1,15 @@
 ---
 import { profile } from "../data/profile";
+import { getLang, home, languages, localize, ui, type Lang } from "../i18n";
 
-const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const lang = getLang(Astro.url);
+const t = ui[lang];
+const base = home(lang);
 const here = Astro.url.pathname.replace(/\/?$/, "/");
 const links = [
-  { label: "Home", href: base },
-  { label: "Projects", href: `${base}projects/` },
-  { label: "About", href: `${base}about/` },
+  { label: t.home, href: base },
+  { label: t.projects, href: `${base}projects/` },
+  { label: t.about, href: `${base}about/` },
 ];
 ---
 
@@ -15,7 +18,10 @@ const links = [
   <nav class="mono nav">
     {links.map((l) => <a href={l.href} aria-current={here === l.href ? "page" : undefined}>{l.label}</a>)}
   </nav>
-  <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+  <select class="mono lang-select" aria-label={t.language}>
+    {(Object.keys(languages) as Lang[]).map((l) => <option value={localize(Astro.url, l)} lang={l} selected={l === lang}>{languages[l]}</option>)}
+  </select>
+  <button class="theme-toggle" type="button" aria-label={t.toggleTheme}>
     <!-- Pixel sun / moon, drawn on an 8×8 grid -->
     <svg class="icon-sun" viewBox="0 0 8 8" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true">
       <path fill="currentColor" d="M3 0h2v1H3zM3 7h2v1H3zM0 3h1v2H0zM7 3h1v2H7zM2 2h4v4H2zM1 1h1v1H1zM6 1h1v1H6zM1 6h1v1H1zM6 6h1v1H6z" />
@@ -53,6 +59,21 @@ const links = [
   .nav a:hover,
   .nav a[aria-current="page"] {
     color: var(--accent);
+  }
+
+  .lang-select {
+    height: 36px;
+    padding: 0 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    box-shadow: var(--shadow);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .lang-select:hover {
+    border-color: var(--accent);
   }
 
   .theme-toggle {
@@ -97,6 +118,9 @@ const links = [
 </style>
 
 <script>
+  const languageSelect = document.querySelector<HTMLSelectElement>(".lang-select")!;
+  languageSelect.addEventListener("change", () => location.assign(languageSelect.value));
+
   const button = document.querySelector(".theme-toggle")!;
   button.addEventListener("click", () => {
     const root = document.documentElement;

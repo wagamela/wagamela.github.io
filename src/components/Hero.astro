@@ -1,5 +1,8 @@
 ---
 import { profile } from "../data/profile";
+import { getLang, ui } from "../i18n";
+
+const lang = getLang(Astro.url);
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
@@ -7,13 +10,13 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
   <canvas class="field" aria-hidden="true"></canvas>
   <div class="container content">
     <div class="photo">
-      <img src={`${base}avatar.jpg`} alt={`Photo of ${profile.name}`} width="120" height="120" />
+      <img src={`${base}avatar.jpg`} alt={ui[lang].photoOf(profile.name)} width="120" height="120" />
     </div>
     <h1 class="name">{profile.name}</h1>
-    <p class="tagline">{profile.tagline}</p>
+    <p class="tagline">{profile.tagline[lang]}</p>
     <p class="mono status">
       <span class="dot" aria-hidden="true"></span>
-      {profile.status} · {profile.location}
+      {profile.status[lang]} · {profile.location}
     </p>
   </div>
 </section>
@@ -246,16 +249,22 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     }).observe(hero);
     document.addEventListener("visibilitychange", () => setRunning(onScreen && !document.hidden));
 
-    const local = (e: PointerEvent) => {
+    const local = (e: { clientX: number; clientY: number }) => {
       const box = canvas.getBoundingClientRect();
       return toCell(e.clientX - box.left, e.clientY - box.top);
+    };
+    const clear = () => {
+      pointer = last = null;
     };
     hero.addEventListener("pointermove", (e) => {
       pointer = local(e);
     });
-    hero.addEventListener("pointerleave", () => {
-      pointer = last = null;
-    });
+    hero.addEventListener("pointerleave", clear);
+    // Touch: the browser cancels pointer events once a swipe turns into a scroll,
+    // but touchmove keeps firing, so the trail follows the finger without blocking scroll.
+    hero.addEventListener("touchmove", (e) => (pointer = local(e.touches[0])), { passive: true });
+    hero.addEventListener("touchend", clear);
+    hero.addEventListener("touchcancel", clear);
     hero.addEventListener("pointerdown", (e) => {
       ripples.push({ ...local(e), t: performance.now() });
     });

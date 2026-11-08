@@ -1,11 +1,14 @@
 ---
 import { experience } from "../data/profile";
+import { getLang, ui } from "../i18n";
+
+const lang = getLang(Astro.url);
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
 <section class="container section reveal" id="experience">
-  <h2 class="section-title">Experience</h2>
+  <h2 class="section-title">{ui[lang].experience}</h2>
   <ol class="timeline">
     {
       experience.map((job) => {
@@ -20,11 +23,11 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
           <div>
             <div class="head">
               <h3>{job.href ? <a href={job.href} target="_blank" rel="noopener">{job.company}</a> : job.company}</h3>
-              <span class="mono">{job.period}</span>
+              <span class="mono">{job.period[lang]}</span>
             </div>
-            <p class="role">{job.role}</p>
-            <p class="description">{job.description}</p>
-          </div>
+            <p class="role">{job.role[lang]}</p>
+            <p class="description">{job.description[lang]}</p>
+re          </div>
         </li>
         );
       })

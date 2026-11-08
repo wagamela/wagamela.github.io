@@ -1,11 +1,14 @@
 ---
 import { interests } from "../data/profile";
+import { getLang, pick, ui } from "../i18n";
+
+const lang = getLang(Astro.url);
 ---
 
 <section class="container section reveal" id="interests">
-  <h2 class="section-title">My interests</h2>
+  <h2 class="section-title">{ui[lang].interests}</h2>
   <ul class="chips">
-    {interests.map((item, i) => <li style={`--l:var(--g${(i % 3) + 2})`}>{item}</li>)}
+    {interests.map((item, i) => <li style={`--l:var(--g${(i % 3) + 2})`}>{pick(item, lang)}</li>)}
   </ul>
 </section>
 

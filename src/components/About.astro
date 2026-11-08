@@ -2,18 +2,21 @@
 import { profile, socials } from "../data/profile";
 import PixelArrow from "./PixelArrow.astro";
 import SocialIcon from "./SocialIcon.astro";
+import { getLang, pick, ui } from "../i18n";
+
+const lang = getLang(Astro.url);
 ---
 
 <section class="container section reveal" id="about">
-  <h2 class="section-title">The short version</h2>
-  {profile.bio.map((paragraph) => <p>{paragraph}</p>)}
+  <h2 class="section-title">{ui[lang].shortVersion}</h2>
+  {profile.bio[lang].map((paragraph) => <p>{paragraph}</p>)}
   <ul class="links">
     {
       socials.map((s) => (
         <li>
           <a href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
             {s.icon && <SocialIcon name={s.icon} />}
-            {s.label}
+            {pick(s.label, lang)}
             <PixelArrow />
           </a>
         </li>

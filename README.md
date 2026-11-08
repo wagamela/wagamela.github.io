@@ -6,6 +6,8 @@ My personal portfolio, built with [Astro](https://astro.build) and hosted on Git
 
 All the text on the site lives in [`src/data/profile.ts`](src/data/profile.ts):
 bio, social links, experience, projects and interests. Lines marked `TODO` are placeholders.
+Each piece of text has an English (`en`) and a Turkish (`tr`) version; English is served at `/`,
+Turkish at `/tr/`. Interface labels (nav, section titles) live in [`src/i18n.ts`](src/i18n.ts).
 
 ## Running it locally
 
