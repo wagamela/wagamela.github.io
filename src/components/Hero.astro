@@ -1,8 +1,5 @@
 ---
 import { profile } from "../data/profile";
-import { getLang, ui } from "../i18n";
-
-const lang = getLang(Astro.url);
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
@@ -10,13 +7,13 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
   <canvas class="field" aria-hidden="true"></canvas>
   <div class="container content">
     <div class="photo">
-      <img src={`${base}avatar.jpg`} alt={ui[lang].photoOf(profile.name)} width="120" height="120" />
+      <img src={`${base}avatar.jpg`} alt={`Photo of ${profile.name}`} width="120" height="120" />
     </div>
     <h1 class="name">{profile.name}</h1>
-    <p class="tagline">{profile.tagline[lang]}</p>
+    <p class="tagline">{profile.tagline}</p>
     <p class="mono status">
       <span class="dot" aria-hidden="true"></span>
-      {profile.status[lang]} · {profile.location}
+      {profile.status} · {profile.location}
     </p>
   </div>
 </section>
@@ -266,7 +263,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     hero.addEventListener("touchend", clear);
     hero.addEventListener("touchcancel", clear);
     hero.addEventListener("pointerdown", (e) => {
-      ripples.push({ ...local(e), t: performance.now() });
+      // Touch gets the swipe trail only; the click ripple is for mouse and pen.
+      if (e.pointerType !== "touch") ripples.push({ ...local(e), t: performance.now() });
     });
 
     // Opening ripple from the avatar.

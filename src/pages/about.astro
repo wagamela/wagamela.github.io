@@ -6,12 +6,9 @@ import Interests from "../components/Interests.astro";
 import Footer from "../components/Footer.astro";
 import PixelTexture from "../components/PixelTexture.astro";
 import { profile, aboutSections } from "../data/profile";
-import { getLang, ui } from "../i18n";
-
-const lang = getLang(Astro.url);
 ---
 
-<Base title={`${ui[lang].about} · ${profile.name}`} description={profile.tagline[lang]}>
+<Base title={`About · ${profile.name}`} description={profile.tagline}>
   <Header />
   <main class="textured">
     <PixelTexture />
@@ -19,8 +16,8 @@ const lang = getLang(Astro.url);
     {
       aboutSections.map((s) => (
         <section class="container section reveal">
-          <h2 class="section-title">{s.title[lang]}</h2>
-          {s.paragraphs[lang].map((p) => <p>{p}</p>)}
+          <h2 class="section-title">{s.title}</h2>
+          {s.paragraphs.map((p) => <p>{p}</p>)}
         </section>
       ))
     }
